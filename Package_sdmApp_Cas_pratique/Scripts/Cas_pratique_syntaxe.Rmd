@@ -1,0 +1,220 @@
+---
+title: "Untitled"
+author: "KAFANDO"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Installation des packages**
+
+### **Installation des packages secondaires**
+
+Nous installons les packages secondaires qui seront utilisés.
+
+```{r}
+
+packages <- c("devtools","cranlogs","dplyr","tidyr","ggplot2")
+
+for (package in packages) {
+  if(!requireNamespace(package)){ #verifie si le package n'existe pas déja
+    install.packages(package) # installer en cas de non existence
+  }
+  
+  library(package,character.only = TRUE) #chargement des packages
+}
+
+```
+
+### **Appel du package sdmApp**
+
+Pour une meilleur utilisation en vue d'améliorer, nous utiliserons le package en local. Pour ce faire, nous avons cloner le dépôt github en local. Par suite, nous chargerons localement le package avec la fonction **load_()** et nous effectuerons des modification en local sur le fichier pour voir le rendu.
+
+  - Chargement du package
+  
+```{r}
+
+devtools::load_all(path = "C:/Users/ANSD/Documents/ENSAE-ISE/SEMESTRE 2/R/sdmApp") #Charger le package 
+
+
+```
+## **Exploration des différentes fonctionnalités**
+
+### **Fonction sdmApp_PA()**
+
+Elle affiche une carte (via ggplot2) à partir d’un objet raster binaire représentant la présence (1) en vert ou l’absence (0) en rouge d’une espèce sur une zone géographique
+
+```{r}
+data <- raster::raster(system.file("extdata","AETI.tif",package = "sdmApp")) #Chargement du raster 
+
+data <- data > 4000 #formatage en raster binaire
+sdmApp::sdmApp_PA(data)
+```
+
+### **sdmApp_TimesRasters()**
+
+Elle sert à masquer les absences dans une carte de probabilité d’occurrence (par exemple issue d’un modèle), en multipliant cette carte par une carte binaire de présence/absence. 
+
+**Raster de probabilité d'occurence**
+
+```{r}
+
+r_prob <- raster::raster(system.file("extdata","AETI.tif",package = "sdmApp")) #Cherche le chemin absolu du fichier AETI.tif inclus dans le répertoire extdata du package sdmApp et le charge au format raster
+
+```
+**Raster de présence/Absence**
+
+```{r}
+
+r_abs_pres <- r_prob > raster::cellStats(r_prob, stat='mean', na.rm=TRUE) # Crée un raster booléen (True : si la valeur de la cellule depasse la valeur moyenne et false sinon)
+
+```
+
+```{r}
+r_prob <- r_prob/raster::maxValue(r_prob) #Normaliser en divisant chaque valeur de cellule par un le maximum
+names(r_prob) <- "propability of occurence" #Nommer le raster
+
+
+```
+
+**Raster final montrant uniquement les présences**
+
+```{r}
+#r_prob : raster avec les probabilité d'occurences
+#r_abs_pres : raster avec l'information de présence(1) absence(0)
+
+r_prob_occ<-sdmApp_TimesRasters(r_prob,r_abs_pres) #superposer les deux rasters
+
+sdmApp_RasterPlot(r_prob_occ)
+
+```
+
+### **sdmApp_RasterPlot**
+
+```{r}
+
+r <- raster::raster(system.file("extdata","AETI.tif",package = "sdmApp"))
+sdmApp_RasterPlot(r)
+
+```
+
+### **Fonction sdmApp_fold_Exporer()**
+
+Elle permet de visualiser les folds (blocs de validation croisée spatiale) générés avec blockCV, en les superposant à une carte raster et aux points d’occurrence d’espèce. Affiche à la fois l’ensemble d’entrainement et l’ensemble de test. 
+
+Pour se faire, nous avons besoin du package **BlockCV**, que nous installons depuis github.
+
+```{r}
+
+devtools::install_github("https://github.com/Abson-dev/blockCV")
+
+```
+
+
+```{r}
+
+awt <- raster::brick(system.file("extdata", "awt.grd", package = "blockCV"))
+
+
+```
+
+```{r}
+
+#import presence-absence species data
+PA <- read.csv(system.file("extdata", "PA.csv", package = "blockCV"))
+
+
+```
+
+```{r}
+
+#make a sf object from data.frame
+pa_data <- sf::st_as_sf(PA, coords = c("x", "y"), crs = raster::crs(awt))
+
+```
+
+```{r}
+#spatial blocking by specified range and random assignment
+sb <- spatialBlock(speciesData = pa_data,species = "Species", rasterLayer = awt,theRange = 70000,k = 5, selection = "random",iteration = 100)
+
+sdmApp_fold_Explorer(sb,awt,pa_data,1)
+
+
+```
+
+### **Fonction principale sdmApp()**
+
+Elle permet de lancer une interface graphique basé sur shiny permettant de faire le chargement des données, leur traitement, la modélisation de la distribution des espèces et l'exportation des résultats.
+
+```{r}
+
+sdmApp()
+```
+
+
+
+
+## **Comparaison avec autres package**
+
+La modélisation de la distribution des espèces est un point qui a nécessité la création de plusieurs packages afin de rendre la tache plus simple. sdmApp s'est aligné sur cette dynamique. Dans cette partie, nous comparons les différents packages à sdmApp, en terme de nombre d'utilisation par les internautes de R.
+
+**Récupération des données**
+
+```{r}
+
+
+Base_nbre_telechargement <- cranlogs::cran_downloads(package = c("sdmApp","sdm","dismo","biomod2","maxnet","SDMtune"), #liste des packages à comparer
+                            from = "2020-01-01", to = Sys.Date()) # choix de la période à considérée
+
+
+# Ajouter une colonne "année" à la base afin de faciliter les filtres
+Base_nbre_telechargement <- Base_nbre_telechargement %>%
+  dplyr::mutate(Année = year(date))
+
+
+```
+
+**Agréger les données par package et année**
+
+```{r}
+
+Base_nbre_telechargement_an <- Base_nbre_telechargement %>%
+  dplyr::group_by(package, Année) %>%
+  dplyr::summarise(Nbre_telechargement = sum(count), .groups = "drop")
+
+```
+
+**Tableau récapitulatif**
+
+```{r}
+
+# Réorganiser : années en lignes, packages en colonnes
+Base_telechargement <- Base_nbre_telechargement_an %>%
+  tidyr::pivot_wider(names_from = package, values_from = Nbre_telechargement)
+
+# Afficher le tableau
+print(Base_telechargement)
+```
+
+**Courbe de visualisation**
+
+```{r}
+
+# Tracer le graphique
+ggplot(Base_nbre_telechargement_an, aes(x = Année, y = Nbre_telechargement, color = package)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(title = "Évolution des téléchargements des packages SDM (2020-2025)",
+       x = "Année", y = "Nombre de téléchargements") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    legend.title = element_blank()
+  )
+
+
+
+```
