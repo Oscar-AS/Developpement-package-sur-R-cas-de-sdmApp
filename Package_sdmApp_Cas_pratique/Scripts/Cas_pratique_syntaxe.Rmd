@@ -109,7 +109,9 @@ Pour se faire, nous avons besoin du package **BlockCV**, que nous installons dep
 
 ```{r}
 
-devtools::install_github("https://github.com/Abson-dev/blockCV")
+#devtools::install_github("Abson-dev/blockCV") #Installation du package
+
+library(blockCV) # Chargement
 
 ```
 
@@ -152,9 +154,8 @@ Elle permet de lancer une interface graphique basé sur shiny permettant de fair
 ```{r}
 
 sdmApp()
+
 ```
-
-
 
 
 ## **Comparaison avec autres package**
@@ -218,3 +219,39 @@ ggplot(Base_nbre_telechargement_an, aes(x = Année, y = Nbre_telechargement, col
 
 
 ```
+## Informations sur le package
+
+**Description**
+
+**Historique**
+
+Nous recherchons l'historique du package sdmApp. Pour se faire, nous utiliserons le package **pkgsearch**
+
+
+```{r}
+
+sdmApp_hist <- cran_package_history("sdmApp")%>% 
+  mutate(nb_dependencies = sapply(dependencies, function(dep) {
+    if (is.null(dep)) return(0)
+    else return(nrow(dep))
+  })) %>% 
+select(Package,Version,"Date/Publication" = `Date/Publication`,"Enregistrement sur CRAN" = crandb_file_date,"Mise à jour" = date,"Dépendances" = nb_dependencies)
+
+
+print(sdmApp_hist)
+
+```
+
+```{r}
+library(pkgsearch)
+
+pkg_search("sdmApp")
+```
+```{r}
+packageDescription("sdmApp")
+```
+```{r}
+a= cran_package_history("sdmApp")
+```
+
+
