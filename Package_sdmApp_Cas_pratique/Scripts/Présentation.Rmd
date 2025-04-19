@@ -101,6 +101,30 @@ for (package in packages) {
 
 ```
 
+---
+<!--Plan de présentation-->
+
+# **📝 Plan de la Présentation**
+
+🧭 **1. Introduction** 
+
+<br>
+
+📚 **2. Définition des concepts clés**
+
+<br>
+
+📦 **3. Présentation du package sdmApp**
+
+<br>
+
+🛠️ **4. Cas pratique**
+
+<br>
+
+⚠️ **5. Limites et suggestions**
+
+
 <!--Introduction-->
 
 ---
@@ -116,7 +140,7 @@ class: inverse, center, middle, large
 
 - 🧭**Contexte** 
 
-  Il stage au sein du ***centre international de recherche agronomique (CIRAD)***
+  Stage au sein du ***centre international de recherche agronomique (CIRAD)***
 
   - **📝 thème**:  *modélisation de la distribution des espèces ligneuses dans le bassin arachidier sénégalais *
   
@@ -495,7 +519,7 @@ Elle est la fonction principale du package. Elle permet de lancer l'application 
 
 --
 
-### <span style="color:#228B22">**2. sdmApp_PA**</span>
+### <span style="color:#228B22">**2. sdmApp_PA()**</span>
 
 Elle affiche une carte à partir d’un **objet raster binaire** représentant ***la présence (1) en vert ou l’absence (0) en rouge*** d’une espèce sur une zone géographique.
 
@@ -599,6 +623,12 @@ ggplot(Base_nbre_telechargement_an, aes(x = Année, y = Nbre_telechargement, col
 
 ```
 
+---
+
+class: inverse, center, middle, large
+
+# [<span style="color:#FFFFFF">🖥️ Cas Pratique : Interface Graphique</span>](http://127.0.0.1:5547)
+
 
 ---
 
@@ -618,8 +648,6 @@ class: inverse, center, middle, large
 - **🔧 Dépendance à Java :** Java (≥ 8) est requis, ce qui complique l’installation, notamment sur Windows.
 
 --
-
-- **🗺️ Données raster uniquement **: Le package est centré sur les raster, avec peu de support natif pour d’autres types de données environnementales comme les shapefiles vectoriels.
 
 - ⚙️**Personnalisation faible : **L’interface est simple, mais peu flexible : l’utilisateur avancé ne peut pas facilement modifier les paramètres internes des modèles via l'interface.
 
@@ -646,12 +674,6 @@ class: inverse, center, middle, large
 
 - ✅**Ajout d'une fonctionnalité ** : ajouter une fonctionnalité permettant de determiner pour une espèce donnée, la durée de vies dans l'environnement dans le cas où il peut exister.
 
-
----
-
-class: inverse, center, middle, large
-
-# [<span style="color:#FFFFFF">🖥️ Cas Pratique : Interface Graphique</span>](http://127.0.0.1:5699)
 
 
 ---

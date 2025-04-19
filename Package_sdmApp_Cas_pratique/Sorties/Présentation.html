@@ -71,7 +71,7 @@ class: center, middle
 
 &lt;!-- Bloc Date --&gt;
 &lt;div style="position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 16px;"&gt;
-  18 avril 2025
+  19 avril 2025
 &lt;/div&gt;
 
 &lt;!--Parametres généraux--&gt;
@@ -81,6 +81,30 @@ class: center, middle
 
 &lt;!--Installation des package--&gt;
 
+
+
+---
+&lt;!--Plan de présentation--&gt;
+
+# **📝 Plan de la Présentation**
+
+🧭 **1. Introduction** 
+
+&lt;br&gt;
+
+📚 **2. Définition des concepts clés**
+
+&lt;br&gt;
+
+📦 **3. Présentation du package sdmApp**
+
+&lt;br&gt;
+
+🛠️ **4. Cas pratique**
+
+&lt;br&gt;
+
+⚠️ **5. Limites et suggestions**
 
 
 &lt;!--Introduction--&gt;
@@ -98,7 +122,7 @@ class: inverse, center, middle, large
 
 - 🧭**Contexte** 
 
-  Il stage au sein du ***centre international de recherche agronomique (CIRAD)***
+  Stage au sein du ***centre international de recherche agronomique (CIRAD)***
 
   - **📝 thème**:  *modélisation de la distribution des espèces ligneuses dans le bassin arachidier sénégalais *
   
@@ -488,7 +512,7 @@ Elle est la fonction principale du package. Elle permet de lancer l'application 
 
 --
 
-### &lt;span style="color:#228B22"&gt;**2. sdmApp_PA**&lt;/span&gt;
+### &lt;span style="color:#228B22"&gt;**2. sdmApp_PA()**&lt;/span&gt;
 
 Elle affiche une carte à partir d’un **objet raster binaire** représentant ***la présence (1) en vert ou l’absence (0) en rouge*** d’une espèce sur une zone géographique.
 
@@ -617,6 +641,12 @@ La modélisation de la distribution des espèces est un point qui a nécessité 
 
 &lt;img src="Présentation_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
+---
+
+class: inverse, center, middle, large
+
+# [&lt;span style="color:#FFFFFF"&gt;🖥️ Cas Pratique : Interface Graphique&lt;/span&gt;](http://127.0.0.1:5547)
+
 
 ---
 
@@ -636,8 +666,6 @@ class: inverse, center, middle, large
 - **🔧 Dépendance à Java :** Java (≥ 8) est requis, ce qui complique l’installation, notamment sur Windows.
 
 --
-
-- **🗺️ Données raster uniquement **: Le package est centré sur les raster, avec peu de support natif pour d’autres types de données environnementales comme les shapefiles vectoriels.
 
 - ⚙️**Personnalisation faible : **L’interface est simple, mais peu flexible : l’utilisateur avancé ne peut pas facilement modifier les paramètres internes des modèles via l'interface.
 
@@ -664,12 +692,6 @@ class: inverse, center, middle, large
 
 - ✅**Ajout d'une fonctionnalité ** : ajouter une fonctionnalité permettant de determiner pour une espèce donnée, la durée de vies dans l'environnement dans le cas où il peut exister.
 
-
----
-
-class: inverse, center, middle, large
-
-# [&lt;span style="color:#FFFFFF"&gt;🖥️ Cas Pratique : Interface Graphique&lt;/span&gt;](http://127.0.0.1:5699)
 
 
 ---
